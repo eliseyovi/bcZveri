@@ -2,8 +2,8 @@ window.addEventListener("load", () => {
   const intro = document.getElementById("intro");
   if (!intro) return;
 
-  const visibleTime = 4000;
-  const fadeDuration = 2000;
+  const visibleTime = 2500;
+  const fadeDuration = 1500;
 
   setTimeout(() => {
     intro.classList.add('hidden');
@@ -63,19 +63,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ===== REVEAL ===== */
-  function handleReveal() {
-    const reveals = document.querySelectorAll('.reveal');
-    reveals.forEach(element => {
-      const rect = element.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight - 100;
-      if (isVisible) {
-        element.classList.add('visible');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
       }
     });
-  }
+  }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
 
-  handleReveal();
-  window.addEventListener('scroll', handleReveal, { passive: true });
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
   /* ===== SCROLL TO TOP ===== */
   const scrollToTopBtn = document.getElementById('scrollToTop');
