@@ -18,49 +18,44 @@ window.addEventListener("load", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ===== HAMBURGER MENU ===== */
-  const burgerBtn = document.getElementById('burgerBtn');
-  const mainNav = document.getElementById('mainNav');
+  /* ===== BOTTOM NAV — активный пункт при скролле ===== */
+  (function initBottomNav() {
+    var links = document.querySelectorAll('.bnav-link');
+    if (!links.length) return;
 
-  // Создаём overlay
-  const navOverlay = document.createElement('div');
-  navOverlay.className = 'nav-overlay';
-  document.body.appendChild(navOverlay);
+    var sections = [];
+    links.forEach(function(link) {
+      var id = link.getAttribute('href').replace('#', '');
+      var sec = document.getElementById(id);
+      if (sec) sections.push({ id: id, el: sec, link: link });
+    });
 
-  function openMenu() {
-    burgerBtn.classList.add('open');
-    mainNav.classList.add('open');
-    navOverlay.classList.add('visible');
-    burgerBtn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeMenu() {
-    burgerBtn.classList.remove('open');
-    mainNav.classList.remove('open');
-    navOverlay.classList.remove('visible');
-    burgerBtn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  burgerBtn?.addEventListener('click', () => {
-    const isOpen = mainNav.classList.contains('open');
-    isOpen ? closeMenu() : openMenu();
-  });
-
-  navOverlay.addEventListener('click', closeMenu);
-
-  // Закрываем меню при клике на ссылку
-  mainNav?.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', closeMenu);
-  });
-
-  // Закрываем по Escape
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mainNav.classList.contains('open')) {
-      closeMenu();
+    function updateActive() {
+      var scrollY = window.pageYOffset + window.innerHeight * 0.4;
+      var current = null;
+      sections.forEach(function(s) {
+        if (s.el.offsetTop <= scrollY) current = s;
+      });
+      links.forEach(function(l) { l.classList.remove('active'); });
+      if (current) current.link.classList.add('active');
     }
-  });
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+
+    // Плавный скролл + закрытие любых overlay
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var id = link.getAttribute('href').replace('#', '');
+        var target = document.getElementById(id);
+        if (target) {
+          var offset = target.offsetTop - 80;
+          window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+      });
+    });
+  })();
 
   /* ===== REVEAL ===== */
   const revealObserver = new IntersectionObserver((entries) => {
