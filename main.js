@@ -160,6 +160,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelectorAll('.carousel').forEach(initCarousel);
 
+  /* ===== LAZY LOAD PLAYER AVATARS ===== */
+  (function() {
+    var avatars = document.querySelectorAll('.player-avatar[data-src]');
+    if (!avatars.length) return;
+
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries, o) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          var img = entry.target;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+          }
+          o.unobserve(img);
+        });
+      }, { rootMargin: '300px 0px' });
+      avatars.forEach(function(img) { obs.observe(img); });
+    } else {
+      avatars.forEach(function(img) {
+        if (img.dataset.src) { img.src = img.dataset.src; }
+      });
+    }
+  })();
+
   /* ===== LAZY LOAD MEDIA ===== */
   const lazyObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {

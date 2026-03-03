@@ -126,6 +126,7 @@ body::after {
   opacity: 0.12;
   animation: floatBall 18s ease-in-out infinite;
   filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.4));
+  will-change: transform;
 }
 
 .float-ball-1 { top: 15%; left: 8%; animation-delay: 0s; }
@@ -726,13 +727,58 @@ h2 {
 .players-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
+
+/* Именованные колонки через colgroup классы */
+.players-table col.col-photo    { width: 80px; }
+.players-table col.col-name     { width: 260px; }
+.players-table col.col-number   { width: 100px; }
+.players-table col.col-position { width: 220px; }
 
 .players-table th,
 .players-table td {
-  padding: 20px 28px;
+  padding: 16px 24px;
   text-align: left;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* === Ширины колонок: Игрок | Номер | Позиция === */
+.players-table th:nth-child(2),
+.players-table td:nth-child(2) { width: 110px; text-align: center; }
+.players-table th:nth-child(3),
+.players-table td:nth-child(3) { width: 260px; }
+
+/* ===== ЯЧЕЙКА ИГРОКА: фото + имя ===== */
+.player-cell {
+  display: flex !important;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 24px !important;
+}
+
+.player-avatar {
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  border: 2px solid rgba(255, 107, 53, 0.35);
+  display: block;
+  flex-shrink: 0;
+  background: rgba(255, 107, 53, 0.08)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,107,53,0.35)' stroke-width='1.5'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E")
+    center / 55% no-repeat;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.players-table tbody tr:hover .player-avatar {
+  border-color: var(--accent);
+  box-shadow: 0 0 14px rgba(255, 107, 53, 0.5);
+  transform: scale(1.1);
 }
 
 .players-table th {
@@ -799,10 +845,10 @@ h2 {
   color: var(--accent-light);
   display: inline-block;
   transition: all 0.3s ease;
+  white-space: normal;
 }
 
 .players-table tbody tr:hover .player-name {
-  transform: translateX(6px);
   color: var(--accent);
 }
 
@@ -810,11 +856,12 @@ h2 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 36px;
-  height: 36px;
+  min-width: 38px;
+  height: 38px;
   background: rgba(255, 107, 53, 0.15);
   border-radius: 10px;
   font-weight: 700;
+  font-size: 15px;
   color: var(--accent);
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
@@ -825,6 +872,7 @@ h2 {
   color: white;
   box-shadow: 0 0 20px var(--accent);
 }
+
 
 .coach-badge {
   display: inline-block;
@@ -1874,6 +1922,7 @@ footer p {
   opacity: 0;
   transform: translateY(50px);
   transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
 }
 
 .reveal.visible {
@@ -2093,19 +2142,27 @@ footer p {
 
   .players-table th,
   .players-table td {
-    padding: 14px 16px;
+    padding: 10px 14px;
     font-size: 13px;
   }
 
   .players-table th {
     font-size: 11px;
-    padding: 12px 16px;
+    padding: 10px 14px;
   }
 
+  .players-table th:nth-child(2),
+  .players-table td:nth-child(2) { width: 90px; }
+  .players-table th:nth-child(3),
+  .players-table td:nth-child(3) { width: 200px; }
+
+  .player-cell { gap: 10px; padding: 8px 14px !important; }
+  .player-avatar { width: 40px; height: 40px; min-width: 40px; }
+
   .player-number {
-    min-width: 32px;
-    height: 32px;
-    font-size: 14px;
+    min-width: 30px;
+    height: 30px;
+    font-size: 13px;
   }
 
   /* Stats */
@@ -2343,9 +2400,17 @@ footer p {
 
   .players-table th,
   .players-table td {
-    padding: 12px 10px;
+    padding: 8px 10px;
     font-size: 12px;
   }
+
+  .players-table th:nth-child(2),
+  .players-table td:nth-child(2) { width: 70px; }
+  .players-table th:nth-child(3),
+  .players-table td:nth-child(3) { width: 130px; }
+
+  .player-cell { gap: 8px; padding: 6px 10px !important; }
+  .player-avatar { width: 34px; height: 34px; min-width: 34px; }
 
   .stats {
     flex-direction: column;
@@ -2414,4 +2479,120 @@ footer p {
   .player-stats-grid {
     grid-template-columns: 1fr;
   }
+}
+/* =====================================================
+   ОПТИМИЗАЦИЯ ПРОИЗВОДИТЕЛЬНОСТИ — МОБИЛЬНЫЕ
+===================================================== */
+@media (max-width: 768px) {
+  /* Отключаем тяжёлые фоновые анимации */
+  .floating-elements,
+  .stars,
+  .light1, .light2, .light3 {
+    display: none;
+  }
+
+  .animated-bg::before {
+    animation: none;
+  }
+
+  body::before, body::after {
+    display: none;
+  }
+
+  /* Убираем backdrop-filter там где не критично */
+  .stat,
+  .victory-card,
+  .contact-card,
+  .players-table-wrapper {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  /* Упрощаем transition на таблице */
+  .players-table-wrapper {
+    transition: none;
+  }
+
+  .players-table-wrapper:hover {
+    transform: none;
+  }
+
+  /* Отключаем сложные hover-эффекты на тач-устройствах */
+  .stat:hover,
+  .victory-card:hover,
+  .contact-card:hover {
+    transform: none;
+  }
+
+  /* Упрощаем reveal анимацию */
+  .reveal {
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+  }
+}
+
+/* =====================================================
+   ПОДДЕРЖКА prefers-reduced-motion
+===================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =====================================================
+   TOUCH УСТРОЙСТВА — убираем hover-артефакты
+===================================================== */
+@media (hover: none) and (pointer: coarse) {
+  .players-table tbody tr:hover {
+    background: transparent;
+    transform: none;
+  }
+  .players-table tbody tr:hover .player-name {
+    transform: none;
+    color: var(--accent-light);
+  }
+  .players-table tbody tr:hover .player-number {
+    transform: none;
+    background: rgba(255, 107, 53, 0.15);
+    color: var(--accent);
+    box-shadow: none;
+  }
+  .players-table tbody tr:hover .player-avatar {
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: rgba(255, 107, 53, 0.35);
+  }
+  .players-table tbody tr:active {
+    background: rgba(255, 107, 53, 0.08);
+  }
+  .stat:hover, .victory-card:hover, .contact-card:hover {
+    transform: none;
+  }
+  .players-table-wrapper:hover {
+    transform: none;
+  }
+}
+
+/* =====================================================
+   content-visibility для офф-скрин секций
+===================================================== */
+#highlights, #stats, #history, #victories, #training, #contact {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* Отключаем тяжёлые эффекты на очень слабых устройствах */
+@media (max-width: 480px) {
+  .glitch::before, .glitch::after { display: none; }
+  .hero-particles { display: none; }
 }
