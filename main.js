@@ -509,7 +509,31 @@ document.addEventListener("DOMContentLoaded", () => {
         this.style.pointerEvents = 'none';
       }
     });
-  });
+  
+  /* ===== RESULTS FILTER ===== */
+  (function initResultsFilter() {
+    var btns  = document.querySelectorAll('.results-filter-btn');
+    var cards = document.querySelectorAll('.result-card');
+    if (!btns.length) return;
+
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var filter = btn.getAttribute('data-filter');
+        btns.forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+
+        cards.forEach(function(card) {
+          if (filter === 'all' || card.getAttribute('data-result') === filter) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+  })();
+
+});
 
   console.log('✓ БК "Звери" - Сайт загружен успешно! 🏀');
   console.log('✓ Все анимации активированы');
