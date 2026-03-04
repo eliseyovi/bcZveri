@@ -2325,3 +2325,235 @@ footer p {
   .glitch::before, .glitch::after { display: none; }
   .hero-particles { display: none; }
 }
+/* =====================================================
+   БЛОК ФИНАЛЬНОГО МАТЧА
+===================================================== */
+#next-match {
+  padding: 40px 24px 20px;
+}
+
+.final-match-banner {
+  max-width: 860px;
+  margin: 0 auto;
+  background: rgba(255, 107, 53, 0.04);
+  border: 1px solid rgba(255, 107, 53, 0.3);
+  border-radius: 24px;
+  padding: 36px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(255, 107, 53, 0.12), inset 0 0 40px rgba(255, 107, 53, 0.03);
+  backdrop-filter: blur(10px);
+}
+
+/* Светящаяся полоска сверху */
+.final-match-banner::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), var(--accent), transparent);
+  animation: matchGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes matchGlow {
+  from { opacity: 0.6; }
+  to   { opacity: 1; box-shadow: 0 0 20px var(--accent); }
+}
+
+/* Бейдж ФИНАЛ СЕЗОНА */
+.final-match-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 7px 20px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+}
+
+.final-fire { font-size: 14px; }
+
+/* Мета: дата, место, лига */
+.final-match-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.final-match-date,
+.final-match-venue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 15px;
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
+}
+
+.final-match-league {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Команды */
+.final-match-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.final-team {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.final-team-home { justify-content: flex-start; }
+.final-team-away { justify-content: flex-end; }
+
+.final-team-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255,107,53,0.4));
+}
+
+.final-team-logo-placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2a2a2e, #1a1a1e);
+  border: 2px solid rgba(255,107,53,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14px;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.final-team-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.final-team-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.final-team-city {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* VS блок по центру */
+.final-vs-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.final-vs-circle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: rgba(255,107,53,0.1);
+  border: 2px solid rgba(255,107,53,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: 1px;
+}
+
+.final-preview-tag {
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  background: rgba(255,107,53,0.1);
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,107,53,0.2);
+}
+
+/* Кнопка трансляции */
+.final-watch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 13px 32px;
+  border-radius: 50px;
+  letter-spacing: 0.3px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(255, 107, 53, 0.35);
+}
+
+.final-watch-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.55);
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+  #next-match { padding: 24px 14px 10px; }
+
+  .final-match-banner {
+    padding: 24px 18px;
+    border-radius: 18px;
+  }
+
+  .final-match-teams {
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .final-team-name { font-size: 15px; }
+  .final-team-logo { width: 44px; height: 44px; }
+  .final-team-logo-placeholder { width: 44px; height: 44px; font-size: 12px; }
+  .final-vs-circle { width: 44px; height: 44px; font-size: 12px; }
+
+  .final-match-date,
+  .final-match-venue { font-size: 13px; }
+}
+
+@media (max-width: 480px) {
+  .final-match-banner { padding: 20px 14px; }
+  .final-team-name { font-size: 13px; }
+  .final-team-city { font-size: 11px; }
+  .final-team-logo { width: 38px; height: 38px; }
+  .final-team-logo-placeholder { width: 38px; height: 38px; font-size: 11px; }
+  .final-match-badge { font-size: 10px; letter-spacing: 1.5px; padding: 6px 14px; }
+  .final-watch-btn { font-size: 13px; padding: 11px 24px; }
+}
